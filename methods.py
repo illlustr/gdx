@@ -890,7 +890,7 @@ def generate_vs_project(env, num_jobs):
                     for platform in ModuleConfigs.PLATFORMS
                 ]
                 self.arg_dict["runfile"] += [
-                    f'bin\\godot.windows.{config_id}.{plat_id}{f".{name}" if name else ""}.exe'
+                    f'bin\\gdx.windows.{config_id}.{plat_id}{f".{name}" if name else ""}.exe'
                     for config_id in ModuleConfigs.CONFIGURATION_IDS
                     for plat_id in ModuleConfigs.PLATFORM_IDS
                 ]
@@ -982,7 +982,7 @@ def generate_vs_project(env, num_jobs):
             env["MSVS"]["PROJECTSUFFIX"] = ".vcxproj"
             env["MSVS"]["SOLUTIONSUFFIX"] = ".sln"
         env.MSVSProject(
-            target=["#godot" + env["MSVSPROJECTSUFFIX"]],
+            target=["#gdx" + env["MSVSPROJECTSUFFIX"]],
             incs=env.vs_incs,
             srcs=env.vs_srcs,
             auto_build_solution=1,
