@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="VisualAccidentalNoiseNodeFractalVariant" inherits="VisualAccidentalNoiseNode" version="3.2">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+	</methods>
+	<members>
+		<member name="basis" type="int" setter="set_basis" getter="get_basis" enum="AccidentalNoise.BasisTypes" default="2">
+		</member>
+		<member name="interpolation" type="int" setter="set_interpolation" getter="get_interpolation" enum="AccidentalNoise.InterpolationTypes" default="3">
+		</member>
+		<member name="type" type="int" setter="set_type" getter="get_type" enum="VisualAccidentalNoiseNodeFractalVariant.FractalType" default="0">
+		</member>
+	</members>
+	<constants>
+		<constant name="TYPE_FBM" value="0" enum="FractalType">
+		</constant>
+		<constant name="TYPE_RIDGED_MULTIFRACTAL" value="1" enum="FractalType">
+		</constant>
+		<constant name="TYPE_BILLOW" value="2" enum="FractalType">
+		</constant>
+	</constants>
+</class>

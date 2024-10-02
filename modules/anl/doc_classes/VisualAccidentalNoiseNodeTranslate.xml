@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="VisualAccidentalNoiseNodeTranslate" inherits="VisualAccidentalNoiseNode" version="3.2">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+	</methods>
+	<members>
+		<member name="axis" type="int" setter="set_axis" getter="get_axis" enum="Axis.AxisType" default="0">
+		</member>
+	</members>
+	<constants>
+	</constants>
+</class>

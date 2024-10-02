@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="VisualAccidentalNoiseNodeSetVar" inherits="VisualAccidentalNoiseNode" version="3.2">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+	</methods>
+	<members>
+		<member name="value" type="float" setter="set_value" getter="get_value" default="0.0">
+		</member>
+		<member name="var" type="String" setter="set_var" getter="get_var" default="&quot;name&quot;">
+		</member>
+	</members>
+	<constants>
+	</constants>
+</class>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="VisualAccidentalNoiseNodeCellularBasis" inherits="VisualAccidentalNoiseNode" version="3.2">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+	</methods>
+	<members>
+		<member name="distance" type="int" setter="set_distance" getter="get_distance" default="0">
+		</member>
+		<member name="seed" type="int" setter="set_seed" getter="get_seed" default="0">
+		</member>
+	</members>
+	<constants>
+	</constants>
+</class>

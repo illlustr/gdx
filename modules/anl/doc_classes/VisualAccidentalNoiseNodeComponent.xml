@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="VisualAccidentalNoiseNodeComponent" inherits="VisualAccidentalNoiseNode" version="3.2">
+	<brief_description>
+		Component noise node.
+	</brief_description>
+	<description>
+		Component node acts both as a graph that contains other [VisualAccidentalNoiseNode] derived nodes and as a regular node with inputs and output, so they can be nested. This allows to build the noise chain by encapsulating common or repeated logic that can be reused in other [VisualAccidentalNoise] instances, or simplify the existing chains to improve usability.
+	</description>
+	<tutorials>
+		<link>https://github.com/Xrayez/godot-anl/wiki/Creating-and-Editing-Component-Nodes</link>
+	</tutorials>
+	<methods>
+		<method name="add_node">
+			<return type="void">
+			</return>
+			<argument index="0" name="node" type="VisualAccidentalNoiseNode">
+			</argument>
+			<argument index="1" name="position" type="Vector2">
+			</argument>
+			<argument index="2" name="id" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="can_connect_nodes" qualifiers="const">
+			<return type="bool">
+			</return>
+			<argument index="0" name="from_node" type="int">
+			</argument>
+			<argument index="1" name="from_port" type="int">
+			</argument>
+			<argument index="2" name="to_node" type="int">
+			</argument>
+			<argument index="3" name="to_port" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="connect_nodes">
+			<return type="int" enum="Error">
+			</return>
+			<argument index="0" name="from_node" type="int">
+			</argument>
+			<argument index="1" name="from_port" type="int">
+			</argument>
+			<argument index="2" name="to_node" type="int">
+			</argument>
+			<argument index="3" name="to_port" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="disconnect_nodes">
+			<return type="void">
+			</return>
+			<argument index="0" name="from_node" type="int">
+			</argument>
+			<argument index="1" name="from_port" type="int">
+			</argument>
+			<argument index="2" name="to_node" type="int">
+			</argument>
+			<argument index="3" name="to_port" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="evaluate">
+			<return type="void">
+			</return>
+			<argument index="0" name="noise" type="VisualAccidentalNoise">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="get_node" qualifiers="const">
+			<return type="VisualAccidentalNoiseNode">
+			</return>
+			<argument index="0" name="id" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="get_node_connections" qualifiers="const">
+			<return type="Array">
+			</return>
+			<description>
+			</description>
+		</method>
+		<method name="get_node_list" qualifiers="const">
+			<return type="PoolIntArray">
+			</return>
+			<description>
+			</description>
+		</method>
+		<method name="get_node_position" qualifiers="const">
+			<return type="Vector2">
+			</return>
+			<argument index="0" name="id" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="get_valid_node_id" qualifiers="const">
+			<return type="int">
+			</return>
+			<description>
+			</description>
+		</method>
+		<method name="is_node_connection" qualifiers="const">
+			<return type="bool">
+			</return>
+			<argument index="0" name="from_node" type="int">
+			</argument>
+			<argument index="1" name="from_port" type="int">
+			</argument>
+			<argument index="2" name="to_node" type="int">
+			</argument>
+			<argument index="3" name="to_port" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="remove_node">
+			<return type="void">
+			</return>
+			<argument index="0" name="id" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="set_node_position">
+			<return type="void">
+			</return>
+			<argument index="0" name="id" type="int">
+			</argument>
+			<argument index="1" name="position" type="Vector2">
+			</argument>
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="graph_offset" type="Vector2" setter="set_graph_offset" getter="get_graph_offset" default="Vector2( 0, 0 )">
+		</member>
+		<member name="name" type="String" setter="set_component_name" getter="get_component_name" default="&quot;component&quot;">
+		</member>
+	</members>
+	<constants>
+		<constant name="NODE_ID_INVALID" value="-1">
+		</constant>
+		<constant name="NODE_ID_OUTPUT" value="0">
+		</constant>
+	</constants>
+</class>

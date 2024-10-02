@@ -1,0 +1,1362 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="AccidentalNoise" inherits="Resource" version="3.2">
+	<brief_description>
+		A noise module used for compound noise generation.
+	</brief_description>
+	<description>
+		The module can be used for generating a variety of noise types in a modular way. Noise functions can be chained together to create more complex functions out of elementary ones.
+        The noise generation procedure consists of the two main steps:
+        1. Adding elementary noise functions to Kernel by calling methods that return an index of the created function. The returned index can be then passed to other noise functions that can use it, building a pipeline.
+        2. Using NoiseExecutor methods (e.g get_noise_2d) to obtain the noise at specified index, virtually at any point of the function chain.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="abs">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<description>
+				Returns an index to the absolute of the [code]src_index[/code] function.
+			</description>
+		</method>
+		<method name="acos">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<description>
+				Returns an index to the arc cosine of the [code]src_index[/code] function.
+			</description>
+		</method>
+		<method name="add">
+			<return type="int">
+			</return>
+			<argument index="0" name="src1_index" type="int">
+			</argument>
+			<argument index="1" name="src2_index" type="int">
+			</argument>
+			<description>
+				Adds [code]src1_index[/code] and [code]src2_index[/code] functions and returns the result.
+				Similar to union operation.
+			</description>
+		</method>
+		<method name="add_sequence">
+			<return type="int">
+			</return>
+			<argument index="0" name="base_index" type="int">
+			</argument>
+			<argument index="1" name="number" type="int">
+			</argument>
+			<argument index="2" name="stride" type="int" default="1">
+			</argument>
+			<description>
+				Adds functions starting from [code]base_index[/code] to [code]base_index + number[/code] with step [code]stride[/code].
+			</description>
+		</method>
+		<method name="asin">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<description>
+				Returns an index to the arcsine of the [code]src_index[/code] function.
+			</description>
+		</method>
+		<method name="atan">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<description>
+				Returns an index to the arctangent of the [code]src_index[/code] function.
+			</description>
+		</method>
+		<method name="bias">
+			<return type="int">
+			</return>
+			<argument index="0" name="src1_index" type="int">
+			</argument>
+			<argument index="1" name="src2_index" type="int">
+			</argument>
+			<description>
+				Bias has the effect of applying the following function to the output of its source:
+				[code]f(x)=pow(x, log(b)/log(0.5))[/code]
+				When applied to a function in the range of (0,1), this has the effect of "pushing" the values of the function toward 1 if b is greater than 0.5, or pushing them toward 0 if b is less than 0.5. In effect, it "biases" the function toward one end of the range or the other.
+			</description>
+		</method>
+		<method name="billow">
+			<return type="int">
+			</return>
+			<argument index="0" name="basis_type" type="int" enum="AccidentalNoise.BasisTypes">
+			</argument>
+			<argument index="1" name="interp_type" type="int" enum="AccidentalNoise.InterpolationTypes">
+			</argument>
+			<argument index="2" name="numoctaves" type="int">
+			</argument>
+			<argument index="3" name="frequency" type="float">
+			</argument>
+			<argument index="4" name="seed" type="int">
+			</argument>
+			<argument index="5" name="rotation" type="bool" default="true">
+			</argument>
+			<description>
+				Generates "billowy" noise suitable for clouds and rocks.
+			</description>
+		</method>
+		<method name="billow_layer">
+			<return type="int">
+			</return>
+			<argument index="0" name="basis_type" type="int" enum="AccidentalNoise.BasisTypes">
+			</argument>
+			<argument index="1" name="interp_type_index" type="int">
+			</argument>
+			<argument index="2" name="scale" type="float">
+			</argument>
+			<argument index="3" name="frequency" type="float">
+			</argument>
+			<argument index="4" name="seed" type="int">
+			</argument>
+			<argument index="5" name="rotation" type="bool" default="true">
+			</argument>
+			<argument index="6" name="angle" type="float" default="0.5">
+			</argument>
+			<argument index="7" name="ax" type="float" default="0.0">
+			</argument>
+			<argument index="8" name="ay" type="float" default="0.0">
+			</argument>
+			<argument index="9" name="az" type="float" default="1.0">
+			</argument>
+			<description>
+				Generates "billowy" noise suitable for clouds and rocks, with ability to rotate the base. Can be combined to generate complex billow function.
+			</description>
+		</method>
+		<method name="cellular_basis">
+			<return type="int">
+			</return>
+			<argument index="0" name="f1" type="int">
+			</argument>
+			<argument index="1" name="f2" type="int">
+			</argument>
+			<argument index="2" name="f3" type="int">
+			</argument>
+			<argument index="3" name="f4" type="int">
+			</argument>
+			<argument index="4" name="d1" type="int">
+			</argument>
+			<argument index="5" name="d2" type="int">
+			</argument>
+			<argument index="6" name="d3" type="int">
+			</argument>
+			<argument index="7" name="d4" type="int">
+			</argument>
+			<argument index="8" name="distance_index" type="int">
+			</argument>
+			<argument index="9" name="seed_index" type="int">
+			</argument>
+			<description>
+				Generates cellular noise based on the function originally written by Steve Worley. The function calculates F1,F2,F3 and F4 as distances to the first, second, third and fourth nearest seed points, applies the specified coefficients to the distances and sums them together, returning the result.
+			</description>
+		</method>
+		<method name="clamp">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="low_index" type="int">
+			</argument>
+			<argument index="2" name="high_index" type="int">
+			</argument>
+			<description>
+				Clamps the noise function [code]src_index[/code] in the range of [code]low_index[/code] function and [code]high_index[/code] function.
+				Clamp is useful for ensuring that the output of a function does not go beyond a specified range. And values beyond the given range will be clipped.
+			</description>
+		</method>
+		<method name="clear">
+			<return type="void">
+			</return>
+			<description>
+				Clears the noise kernel from all assosiated noise instruction indexes and noise variables.
+			</description>
+		</method>
+		<method name="color">
+			<return type="int">
+			</return>
+			<argument index="0" name="color" type="Color">
+			</argument>
+			<description>
+				Returns a constant color function in RGBA format.
+			</description>
+		</method>
+		<method name="combine_hsva">
+			<return type="int">
+			</return>
+			<argument index="0" name="h_index" type="int">
+			</argument>
+			<argument index="1" name="s_index" type="int">
+			</argument>
+			<argument index="2" name="v_index" type="int">
+			</argument>
+			<argument index="3" name="a_index" type="int">
+			</argument>
+			<description>
+				Treats and combines specified noise functions as hue, saturation, value and alpha channels (HSVA).
+				This can be used to create colored textures.
+			</description>
+		</method>
+		<method name="combine_rgba">
+			<return type="int">
+			</return>
+			<argument index="0" name="r_index" type="int">
+			</argument>
+			<argument index="1" name="g_index" type="int">
+			</argument>
+			<argument index="2" name="b_index" type="int">
+			</argument>
+			<argument index="3" name="a_index" type="int">
+			</argument>
+			<description>
+				Treats and combines specified noise functions into red, green, blue and alpha channels (RGBA).
+				This can be used to create colored textures.
+			</description>
+		</method>
+		<method name="constant">
+			<return type="int">
+			</return>
+			<argument index="0" name="value" type="float">
+			</argument>
+			<description>
+				Generates a noise function with constant value of [code]value[/code].
+				Perhaps the most commonly used noise function. Think of this as [code]int[/code] or [code]float[/code] variable that can be passed to other functions as an argument.
+			</description>
+		</method>
+		<method name="cos">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<description>
+				Returns an index to the cosine of the [code]src_index[/code] function.
+			</description>
+		</method>
+		<method name="curve_section">
+			<return type="int">
+			</return>
+			<argument index="0" name="lowv_index" type="int">
+			</argument>
+			<argument index="1" name="t0_index" type="int">
+			</argument>
+			<argument index="2" name="t1_index" type="int">
+			</argument>
+			<argument index="3" name="v0_index" type="int">
+			</argument>
+			<argument index="4" name="v1_index" type="int">
+			</argument>
+			<argument index="5" name="control_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="divide">
+			<return type="int">
+			</return>
+			<argument index="0" name="src1_index" type="int">
+			</argument>
+			<argument index="1" name="src2_index" type="int">
+			</argument>
+			<description>
+				Divides [code]src1_index[/code] by [code]src2_index[/code] functions and returns the result.
+				Similar to symmetric difference operation.
+			</description>
+		</method>
+		<method name="du">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="spacing_index" type="int">
+			</argument>
+			<description>
+				Returns a derivative of [code]u[/code] dimension.
+			</description>
+		</method>
+		<method name="dv">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="spacing_index" type="int">
+			</argument>
+			<description>
+				Returns a derivative of [code]v[/code] dimension.
+			</description>
+		</method>
+		<method name="dw">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="spacing_index" type="int">
+			</argument>
+			<description>
+				Returns a derivative of [code]w[/code] dimension.
+			</description>
+		</method>
+		<method name="dx">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="spacing_index" type="int">
+			</argument>
+			<description>
+				Returns a derivative of [code]x[/code] dimension.
+			</description>
+		</method>
+		<method name="dy">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="spacing_index" type="int">
+			</argument>
+			<description>
+				Returns a derivative of [code]y[/code] dimension.
+			</description>
+		</method>
+		<method name="dz">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="spacing_index" type="int">
+			</argument>
+			<description>
+				Returns a derivative of [code]z[/code] dimension.
+			</description>
+		</method>
+		<method name="e">
+			<return type="int">
+			</return>
+			<description>
+				Generates a noise function with constant value of e (Euler number).
+			</description>
+		</method>
+		<method name="evaluate">
+			<return type="int">
+			</return>
+			<argument index="0" name="expression" type="String">
+			</argument>
+			<description>
+				Parses expression and generates a noise function from it.
+				[codeblock]
+				var an = AccidentalNoise.new()
+				var expression = "select(0, 1, scale_y(scale_x(translate(gradient_basis(2, 2), simplex_basis(3)), 5), 5), value_basis(2, 8), 0)"
+				an.function = an.evaluate(expression)
+				var noise = an.get_image()
+				[/codeblock]
+			</description>
+		</method>
+		<method name="fbm">
+			<return type="int">
+			</return>
+			<argument index="0" name="basis_type" type="int" enum="AccidentalNoise.BasisTypes">
+			</argument>
+			<argument index="1" name="interp_type" type="int" enum="AccidentalNoise.InterpolationTypes">
+			</argument>
+			<argument index="2" name="numoctaves" type="int">
+			</argument>
+			<argument index="3" name="frequency" type="float">
+			</argument>
+			<argument index="4" name="seed" type="int">
+			</argument>
+			<argument index="5" name="rotation" type="bool" default="true">
+			</argument>
+			<description>
+				Generates Fractal Brownian Motion function.
+			</description>
+		</method>
+		<method name="fractal">
+			<return type="int">
+			</return>
+			<argument index="0" name="seed_index" type="int">
+			</argument>
+			<argument index="1" name="layer_index" type="int">
+			</argument>
+			<argument index="2" name="persistence_index" type="int">
+			</argument>
+			<argument index="3" name="lacunarity_index" type="int">
+			</argument>
+			<argument index="4" name="numoctaves_index" type="int">
+			</argument>
+			<argument index="5" name="frequency_index" type="int">
+			</argument>
+			<description>
+				Generates generic fractal function.
+			</description>
+		</method>
+		<method name="fractal_layer">
+			<return type="int">
+			</return>
+			<argument index="0" name="basis_type" type="int" enum="AccidentalNoise.BasisTypes">
+			</argument>
+			<argument index="1" name="interp_type_index" type="int">
+			</argument>
+			<argument index="2" name="scale" type="float">
+			</argument>
+			<argument index="3" name="frequency" type="float">
+			</argument>
+			<argument index="4" name="seed" type="int">
+			</argument>
+			<argument index="5" name="rotation" type="bool" default="true">
+			</argument>
+			<argument index="6" name="angle" type="float" default="0.5">
+			</argument>
+			<argument index="7" name="ax" type="float" default="0.0">
+			</argument>
+			<argument index="8" name="ay" type="float" default="0.0">
+			</argument>
+			<argument index="9" name="az" type="float" default="1.0">
+			</argument>
+			<description>
+				Generates generic fractal function, with ability to rotate the base. Can be combined to generate complex fractals.
+			</description>
+		</method>
+		<method name="gain">
+			<return type="int">
+			</return>
+			<argument index="0" name="src1_index" type="int">
+			</argument>
+			<argument index="1" name="src2_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="get_color_2d">
+			<return type="Color">
+			</return>
+			<argument index="0" name="x" type="float">
+			</argument>
+			<argument index="1" name="y" type="float">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="get_color_2dv">
+			<return type="Color">
+			</return>
+			<argument index="0" name="pos" type="Vector2">
+			</argument>
+			<description>
+				Convenience method, takes a Vector2 as coordinates and calls [method get_color_2d] internally.
+			</description>
+		</method>
+		<method name="get_color_3d">
+			<return type="Color">
+			</return>
+			<argument index="0" name="x" type="float">
+			</argument>
+			<argument index="1" name="y" type="float">
+			</argument>
+			<argument index="2" name="z" type="float">
+			</argument>
+			<description>
+				Evaluates the noise function at [code](x,y,z)[/code] coordinates and returns a color value.
+			</description>
+		</method>
+		<method name="get_color_3dv">
+			<return type="Color">
+			</return>
+			<argument index="0" name="pos" type="Vector3">
+			</argument>
+			<description>
+				Convenience method, takes a Vector3 as coordinates and calls [method get_color_3d] internally.
+			</description>
+		</method>
+		<method name="get_color_4d">
+			<return type="Color">
+			</return>
+			<argument index="0" name="x" type="float">
+			</argument>
+			<argument index="1" name="y" type="float">
+			</argument>
+			<argument index="2" name="z" type="float">
+			</argument>
+			<argument index="3" name="w" type="float">
+			</argument>
+			<description>
+				Evaluates the noise function at [code](x,y,z,w)[/code] coordinates and returns a color value.
+			</description>
+		</method>
+		<method name="get_color_6d">
+			<return type="Color">
+			</return>
+			<argument index="0" name="x" type="float">
+			</argument>
+			<argument index="1" name="y" type="float">
+			</argument>
+			<argument index="2" name="z" type="float">
+			</argument>
+			<argument index="3" name="w" type="float">
+			</argument>
+			<argument index="4" name="u" type="float">
+			</argument>
+			<argument index="5" name="v" type="float">
+			</argument>
+			<description>
+				Evaluates the noise function at [code](x,y,z,w,u,v)[/code] coordinates and returns a color value.
+			</description>
+		</method>
+		<method name="get_image">
+			<return type="Image">
+			</return>
+			<argument index="0" name="width" type="int">
+			</argument>
+			<argument index="1" name="height" type="int">
+			</argument>
+			<description>
+				Maps a noise function set via [code]function[/code] property to an image.
+				Parameters are configured by setting [code]mode[/code], [code]format[/code], [code]ranges[/code] etc.
+			</description>
+		</method>
+		<method name="get_noise_2d">
+			<return type="float">
+			</return>
+			<argument index="0" name="x" type="float">
+			</argument>
+			<argument index="1" name="y" type="float">
+			</argument>
+			<description>
+				Evaluates the noise function at [code](x,y)[/code] coordinates and returns a scalar value.
+			</description>
+		</method>
+		<method name="get_noise_2dv">
+			<return type="float">
+			</return>
+			<argument index="0" name="pos" type="Vector2">
+			</argument>
+			<description>
+				Convenience method, takes a Vector2 as coordinates and calls [method get_noise_2d] internally.
+			</description>
+		</method>
+		<method name="get_noise_3d">
+			<return type="float">
+			</return>
+			<argument index="0" name="x" type="float">
+			</argument>
+			<argument index="1" name="y" type="float">
+			</argument>
+			<argument index="2" name="z" type="float">
+			</argument>
+			<description>
+				Evaluates the noise function at [code](x,y,z)[/code] coordinates and returns a scalar value.
+			</description>
+		</method>
+		<method name="get_noise_3dv">
+			<return type="float">
+			</return>
+			<argument index="0" name="pos" type="Vector3">
+			</argument>
+			<description>
+				Convenience method, takes a Vector3 as coordinates and calls [method get_noise_3d] internally.
+			</description>
+		</method>
+		<method name="get_noise_4d">
+			<return type="float">
+			</return>
+			<argument index="0" name="x" type="float">
+			</argument>
+			<argument index="1" name="y" type="float">
+			</argument>
+			<argument index="2" name="z" type="float">
+			</argument>
+			<argument index="3" name="w" type="float">
+			</argument>
+			<description>
+				Evaluates the noise function at [code](x,y,z,w)[/code] coordinates and returns a scalar value.
+			</description>
+		</method>
+		<method name="get_noise_6d">
+			<return type="float">
+			</return>
+			<argument index="0" name="x" type="float">
+			</argument>
+			<argument index="1" name="y" type="float">
+			</argument>
+			<argument index="2" name="z" type="float">
+			</argument>
+			<argument index="3" name="w" type="float">
+			</argument>
+			<argument index="4" name="u" type="float">
+			</argument>
+			<argument index="5" name="v" type="float">
+			</argument>
+			<description>
+				Evaluates the noise function at [code](x,y,z,w,u,v)[/code] coordinates and returns a scalar value.
+			</description>
+		</method>
+		<method name="get_seamless_image">
+			<return type="Image">
+			</return>
+			<argument index="0" name="width" type="int">
+			</argument>
+			<argument index="1" name="height" type="int">
+			</argument>
+			<description>
+				Same as [method get_image] but returns seamless image regardless of mapping mode. Can map image of any aspect ratio.
+			</description>
+		</method>
+		<method name="get_texture">
+			<return type="Texture">
+			</return>
+			<argument index="0" name="width" type="int">
+			</argument>
+			<argument index="1" name="height" type="int">
+			</argument>
+			<description>
+				Maps a noise function to a texture, uses [method get_image] internally.
+			</description>
+		</method>
+		<method name="get_var">
+			<return type="int">
+			</return>
+			<argument index="0" name="name" type="String">
+			</argument>
+			<description>
+				Returns a noise function previously set with [method set_var], either via code or corresponding visual noise node.
+			</description>
+		</method>
+		<method name="gradient_basis">
+			<return type="int">
+			</return>
+			<argument index="0" name="interp_index" type="int">
+			</argument>
+			<argument index="1" name="seed_index" type="int">
+			</argument>
+			<description>
+				Generates gradient noise function as basis, with [enum InterpolationTypes] applied.
+				Notice that the first argument takes an index to a function. In order to set interpolation globally and not for each value, use [constant INTERP_QUINTIC], for instance.
+			</description>
+		</method>
+		<method name="hex_bump">
+			<return type="int">
+			</return>
+			<description>
+				Return as noise function with hex bump pattern.
+			</description>
+		</method>
+		<method name="hex_tile">
+			<return type="int">
+			</return>
+			<argument index="0" name="seed_index" type="int">
+			</argument>
+			<description>
+				Return as noise function with hex tile pattern.
+			</description>
+		</method>
+		<method name="linear_step">
+			<return type="int">
+			</return>
+			<argument index="0" name="low_index" type="int">
+			</argument>
+			<argument index="1" name="high_index" type="int">
+			</argument>
+			<argument index="2" name="control_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="max_sequence">
+			<return type="int">
+			</return>
+			<argument index="0" name="base_index" type="int">
+			</argument>
+			<argument index="1" name="number" type="int">
+			</argument>
+			<argument index="2" name="stride" type="int" default="1">
+			</argument>
+			<description>
+				Generates a noise function with maximum value for each funtion starting from [code]base_index[/code] to [code]number[/code] with step [code]stride[/code].
+			</description>
+		</method>
+		<method name="maximum">
+			<return type="int">
+			</return>
+			<argument index="0" name="src1_index" type="int">
+			</argument>
+			<argument index="1" name="src2_index" type="int">
+			</argument>
+			<description>
+				Returns a noise maximum function of [code]src1_index[/code] and [code]src2_index[/code].
+			</description>
+		</method>
+		<method name="min_sequence">
+			<return type="int">
+			</return>
+			<argument index="0" name="base_index" type="int">
+			</argument>
+			<argument index="1" name="number" type="int">
+			</argument>
+			<argument index="2" name="stride" type="int" default="1">
+			</argument>
+			<description>
+				Generates a noise function with minimum value for each funtion starting from [code]base_index[/code] to [code]number[/code] with step [code]stride[/code].
+			</description>
+		</method>
+		<method name="minimum">
+			<return type="int">
+			</return>
+			<argument index="0" name="src1_index" type="int">
+			</argument>
+			<argument index="1" name="src2_index" type="int">
+			</argument>
+			<description>
+				Returns a noise minimum function of [code]src1_index[/code] and [code]src2_index[/code].
+			</description>
+		</method>
+		<method name="mix">
+			<return type="int">
+			</return>
+			<argument index="0" name="low_index" type="int">
+			</argument>
+			<argument index="1" name="high_index" type="int">
+			</argument>
+			<argument index="2" name="control_index" type="int">
+			</argument>
+			<description>
+				Mix has the effect of blending the value from [code]low_index[/code] with the value of [code]high_index[/code] by linearly interpolating from one to the other using the value of [code]control_index[/code]. For best results, [code]control_index[/code] should output in the range of (0,1). All three inputs are scalar parameters that may accept either a constant value or a functional input as a source.
+			</description>
+		</method>
+		<method name="multiply">
+			<return type="int">
+			</return>
+			<argument index="0" name="src1_index" type="int">
+			</argument>
+			<argument index="1" name="src2_index" type="int">
+			</argument>
+			<description>
+				Multiplies [code]src1_index[/code] and [code]src2_index[/code] functions and returns the result.
+				Similar to intersection operation.
+			</description>
+		</method>
+		<method name="multiply_sequence">
+			<return type="int">
+			</return>
+			<argument index="0" name="base_index" type="int">
+			</argument>
+			<argument index="1" name="number" type="int">
+			</argument>
+			<argument index="2" name="stride" type="int" default="1">
+			</argument>
+			<description>
+				Generates a noise function by multiplying each funtion starting from [code]base_index[/code] to [code]number[/code] with step [code]stride[/code].
+			</description>
+		</method>
+		<method name="one">
+			<return type="int">
+			</return>
+			<description>
+				Generates a noise function with constant value of 1.
+			</description>
+		</method>
+		<method name="pi">
+			<return type="int">
+			</return>
+			<description>
+				Generates a noise function with constant value of PI.
+			</description>
+		</method>
+		<method name="point5">
+			<return type="int">
+			</return>
+			<description>
+				Generates a noise function with constant value of 0.5.
+			</description>
+		</method>
+		<method name="pow">
+			<return type="int">
+			</return>
+			<argument index="0" name="src1_index" type="int">
+			</argument>
+			<argument index="1" name="src2_index" type="int">
+			</argument>
+			<description>
+				Return a noise function as a result of [code]src1_index[/code] raised to the power of [code]src2_index[/code].
+			</description>
+		</method>
+		<method name="radial">
+			<return type="int">
+			</return>
+			<description>
+				Generates a radial function. Radius can be controlled by scaling.
+			</description>
+		</method>
+		<method name="randomize">
+			<return type="int">
+			</return>
+			<argument index="0" name="seed_index" type="int">
+			</argument>
+			<argument index="1" name="low_index" type="int">
+			</argument>
+			<argument index="2" name="high_index" type="int">
+			</argument>
+			<description>
+				Returns a random noise function in the range of [code]low_index[/code] to [code]high_index[/code].
+			</description>
+		</method>
+		<method name="ridged_layer">
+			<return type="int">
+			</return>
+			<argument index="0" name="basis_type" type="int" enum="AccidentalNoise.BasisTypes">
+			</argument>
+			<argument index="1" name="interp_type_index" type="int">
+			</argument>
+			<argument index="2" name="scale" type="float">
+			</argument>
+			<argument index="3" name="frequency" type="float">
+			</argument>
+			<argument index="4" name="seed" type="int">
+			</argument>
+			<argument index="5" name="rotation" type="bool" default="true">
+			</argument>
+			<argument index="6" name="angle" type="float" default="0.5">
+			</argument>
+			<argument index="7" name="ax" type="float" default="0.0">
+			</argument>
+			<argument index="8" name="ay" type="float" default="0.0">
+			</argument>
+			<argument index="9" name="az" type="float" default="1.0">
+			</argument>
+			<description>
+				Generates ridged noise, with the ability to rotate the base. See [method ridged_multifractal].
+			</description>
+		</method>
+		<method name="ridged_multifractal">
+			<return type="int">
+			</return>
+			<argument index="0" name="basis_type" type="int" enum="AccidentalNoise.BasisTypes">
+			</argument>
+			<argument index="1" name="interp_type" type="int" enum="AccidentalNoise.InterpolationTypes">
+			</argument>
+			<argument index="2" name="numoctaves" type="int">
+			</argument>
+			<argument index="3" name="frequency" type="float">
+			</argument>
+			<argument index="4" name="seed" type="int">
+			</argument>
+			<argument index="5" name="rotation" type="bool" default="true">
+			</argument>
+			<description>
+				Ridged-multifractal noise is generated in much of the same way as Perlin noise, except the output of each octave is modified by an absolute-value function. Modifying the octave values in this way produces ridge-like formations.
+			</description>
+		</method>
+		<method name="rotate">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="angle_index" type="int">
+			</argument>
+			<argument index="2" name="ax_index" type="int">
+			</argument>
+			<argument index="3" name="ay_index" type="int">
+			</argument>
+			<argument index="4" name="az_index" type="int">
+			</argument>
+			<description>
+				Rotates a noise function.
+			</description>
+		</method>
+		<method name="scale">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="scale_index" type="int">
+			</argument>
+			<description>
+				Scales a noise function (zoom).
+			</description>
+		</method>
+		<method name="scale_offset">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="scale" type="float">
+			</argument>
+			<argument index="2" name="offset" type="float">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="scale_u">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="scale_index" type="int">
+			</argument>
+			<description>
+				Scales a noise function by [code]u[/code] dimension.
+			</description>
+		</method>
+		<method name="scale_v">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="scale_index" type="int">
+			</argument>
+			<description>
+				Scales a noise function by [code]v[/code] dimension.
+			</description>
+		</method>
+		<method name="scale_w">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="scale_index" type="int">
+			</argument>
+			<description>
+				Scales a noise function by [code]w[/code] dimension.
+			</description>
+		</method>
+		<method name="scale_x">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="scale_index" type="int">
+			</argument>
+			<description>
+				Scales a noise function by [code]x[/code] dimension.
+			</description>
+		</method>
+		<method name="scale_y">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="scale_index" type="int">
+			</argument>
+			<description>
+				Scales a noise function by [code]y[/code] dimension.
+			</description>
+		</method>
+		<method name="scale_z">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="scale_index" type="int">
+			</argument>
+			<description>
+				Scales a noise function by [code]z[/code] dimension.
+			</description>
+		</method>
+		<method name="seed">
+			<return type="int">
+			</return>
+			<argument index="0" name="value" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="seeder">
+			<return type="int">
+			</return>
+			<argument index="0" name="seed_index" type="int">
+			</argument>
+			<argument index="1" name="src_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="select">
+			<return type="int">
+			</return>
+			<argument index="0" name="low_index" type="int">
+			</argument>
+			<argument index="1" name="high_index" type="int">
+			</argument>
+			<argument index="2" name="control_index" type="int">
+			</argument>
+			<argument index="3" name="threshold_index" type="int">
+			</argument>
+			<argument index="4" name="falloff_index" type="int">
+			</argument>
+			<description>
+				Select is used to choose between one function or another based on the output value of a third control function. Two parameters control how the select is performed, threshold and falloff. Threshold determines where the dividing line is; values on one side of threshold are taken from one source, while values on the other side are taken from the second source. Falloff defines the width of a soft "blend" zone that straddles threshold, helping to smooth the transition between the two functions.
+			</description>
+		</method>
+		<method name="set_var">
+			<return type="void">
+			</return>
+			<argument index="0" name="name" type="String">
+			</argument>
+			<argument index="1" name="value" type="float">
+			</argument>
+			<description>
+				Sets noise variable which are basically like [method constant] but can be set and retrieved by name. Can be plugged in as argument to other functions to create programmable noise. Resembles uniforms in visual shader.
+				For instance, you can define a variable with [code]noise.set_var('seed', 100)[/code] and retrieve it in visual noise via `GetVar` node. Any variable defined via `SetVar` node in visual noise will be overriden. Calling [method VisualAccidentalNoise.generate] will not clear the variables.
+			</description>
+		</method>
+		<method name="sigmoid">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<description>
+				Returns a sigmoid function.
+			</description>
+		</method>
+		<method name="simplex_basis">
+			<return type="int">
+			</return>
+			<argument index="0" name="seed_index" type="int">
+			</argument>
+			<description>
+				Generates simplex function as basis, with [constant INTERP_QUINTIC] applied.
+			</description>
+		</method>
+		<method name="sin">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<description>
+				Returns an index to the sine of the [code]src_index[/code] function.
+			</description>
+		</method>
+		<method name="smooth_step">
+			<return type="int">
+			</return>
+			<argument index="0" name="low_index" type="int">
+			</argument>
+			<argument index="1" name="high_index" type="int">
+			</argument>
+			<argument index="2" name="control_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="smooth_tiers">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="num_tiers_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="smoother_step">
+			<return type="int">
+			</return>
+			<argument index="0" name="low_index" type="int">
+			</argument>
+			<argument index="1" name="high_index" type="int">
+			</argument>
+			<argument index="2" name="control_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="sqrt2">
+			<return type="int">
+			</return>
+			<description>
+				Returns square root of 2 as a constant function.
+			</description>
+		</method>
+		<method name="step">
+			<return type="int">
+			</return>
+			<argument index="0" name="val_index" type="int">
+			</argument>
+			<argument index="1" name="control_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="subtract">
+			<return type="int">
+			</return>
+			<argument index="0" name="src1_index" type="int">
+			</argument>
+			<argument index="1" name="src2_index" type="int">
+			</argument>
+			<description>
+				Subtracts [code]src2_index[/code] from [code]src1_index[/code] functions and returns the result.
+				Similar to difference operation.
+			</description>
+		</method>
+		<method name="tan">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<description>
+				Returns an index to the tangent of the [code]src_index[/code] function.
+			</description>
+		</method>
+		<method name="tiers">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="num_tiers_index" type="int">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="translate">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="translate_index" type="int">
+			</argument>
+			<description>
+				Translate a noise function (move).
+			</description>
+		</method>
+		<method name="translate_u">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="translate_index" type="int">
+			</argument>
+			<description>
+				Translates a noise function by [code]u[/code] dimension.
+			</description>
+		</method>
+		<method name="translate_v">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="translate_index" type="int">
+			</argument>
+			<description>
+				Translates a noise function by [code]v[/code] dimension.
+			</description>
+		</method>
+		<method name="translate_w">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="translate_index" type="int">
+			</argument>
+			<description>
+				Translates a noise function by [code]w[/code] dimension.
+			</description>
+		</method>
+		<method name="translate_x">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="translate_index" type="int">
+			</argument>
+			<description>
+				Translates a noise function by [code]x[/code] dimension.
+			</description>
+		</method>
+		<method name="translate_y">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="translate_index" type="int">
+			</argument>
+			<description>
+				Translates a noise function by [code]y[/code] dimension.
+			</description>
+		</method>
+		<method name="translate_z">
+			<return type="int">
+			</return>
+			<argument index="0" name="src_index" type="int">
+			</argument>
+			<argument index="1" name="translate_index" type="int">
+			</argument>
+			<description>
+				Translates a noise function by [code]z[/code] dimension.
+			</description>
+		</method>
+		<method name="u">
+			<return type="int">
+			</return>
+			<description>
+				Generates 5th dimension gradient function.
+			</description>
+		</method>
+		<method name="v">
+			<return type="int">
+			</return>
+			<description>
+				Generates 6th dimension gradient function.
+			</description>
+		</method>
+		<method name="value_basis">
+			<return type="int">
+			</return>
+			<argument index="0" name="interp_index" type="int">
+			</argument>
+			<argument index="1" name="seed_index" type="int">
+			</argument>
+			<description>
+				Generates value noise function as basis, with [enum InterpolationTypes] applied.
+				Notice that the first argument takes an index to a function. In order to set interpolation globally and not for each value, use [constant INTERP_QUINTIC], for instance.
+			</description>
+		</method>
+		<method name="w">
+			<return type="int">
+			</return>
+			<description>
+				Generates 4th dimension gradient function.
+			</description>
+		</method>
+		<method name="x">
+			<return type="int">
+			</return>
+			<description>
+				Generates horizontal gradient function.
+			</description>
+		</method>
+		<method name="y">
+			<return type="int">
+			</return>
+			<description>
+				Generates vertical gradient function.
+			</description>
+		</method>
+		<method name="z">
+			<return type="int">
+			</return>
+			<description>
+				Generates depth gradient function.
+			</description>
+		</method>
+		<method name="zero">
+			<return type="int">
+			</return>
+			<description>
+				Generates a noise function with constant value of zero.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="bumpmap_light" type="Vector3" setter="set_bumpmap_light" getter="get_bumpmap_light" default="Vector3( 1, 1, 1 )">
+			Controls light direction.
+		</member>
+		<member name="bumpmap_spacing" type="float" setter="set_bumpmap_spacing" getter="get_bumpmap_spacing" default="1.0">
+			Controls how far away the noise is extruded.
+		</member>
+		<member name="bumpmap_wrapped" type="bool" setter="set_bumpmap_wrapped" getter="is_bumpmap_wrapped" default="true">
+			If set to [code]true[/code], the bump image will be wrapped which is useful for generating seamless bump maps.
+		</member>
+		<member name="expression" type="String" setter="set_expression" getter="get_expression" default="&quot;&quot;">
+			If set, this will override previously created instruction indexes and force to evaluate noise from the expression.
+			Set empty expression to use previously generated noise functions, either via code or visual noise.
+		</member>
+		<member name="format" type="int" setter="set_format" getter="get_format" enum="AccidentalNoise.Format" default="0">
+			Sets the noise format used by [method get_image] and [method get_texture] for noise mapping. See [enum Format].
+		</member>
+		<member name="function" type="int" setter="set_function" getter="get_function" default="0">
+			The index of a function from which noise is evaluated via [method get_noise_2d], [method get_image] or similar.
+		</member>
+		<member name="last_function" type="int" setter="" getter="get_last_function" default="5">
+			Returns an index of the last noise function generated.
+		</member>
+		<member name="mode" type="int" setter="set_mode" getter="get_mode" enum="AccidentalNoise.MappingModes" default="0">
+			Controls seamlessness of the noise function mapped to image. See [enum MappingModes].
+		</member>
+		<member name="normalmap_normalized" type="bool" setter="set_normalmap_normalized" getter="is_normalmap_normalized" default="true">
+			If set to [code]true[/code], normalizes normal map output.
+		</member>
+		<member name="normalmap_spacing" type="float" setter="set_normalmap_spacing" getter="get_normalmap_spacing" default="1.0">
+			Controls how far away the noise is extruded.
+		</member>
+		<member name="normalmap_wrapped" type="bool" setter="set_normalmap_wrapped" getter="is_normalmap_wrapped" default="true">
+			If set to [code]true[/code], the bump image will be wrapped which is useful for generating seamless normal maps.
+		</member>
+		<member name="ranges" type="AABB" setter="set_ranges" getter="get_ranges" default="AABB( -1, -1, -1, 2, 2, 2 )">
+			Controls function's noise mapping ranges to image. Can be set to simulate scale.
+			For 2D, set as [code]AABB(Vector3(-1, -1, 0), Vector3(2, 2, 0))[/code], which corresponds to [code](-1,-1,1,1)[/code].
+		</member>
+	</members>
+	<constants>
+		<constant name="FORMAT_HEIGHTMAP" value="0" enum="Format">
+			Format as heightmap, grayscale, scalar noise image. Suitable for terrain generation.
+		</constant>
+		<constant name="FORMAT_NORMALMAP" value="1" enum="Format">
+			Format as normal map texture, color noise image.
+		</constant>
+		<constant name="FORMAT_BUMPMAP" value="2" enum="Format">
+			Format as bump map texture, grayscale noise image.
+		</constant>
+		<constant name="FORMAT_TEXTURE" value="3" enum="Format">
+			Format colored noise image. Suitable for texture generation.
+		</constant>
+		<constant name="INTERP_NONE" value="0" enum="InterpolationTypes">
+			No interpolation applied.
+		</constant>
+		<constant name="INTERP_LINEAR" value="1" enum="InterpolationTypes">
+			Applies linear interpolation. Produces basic transition.
+		</constant>
+		<constant name="INTERP_HERMITE" value="2" enum="InterpolationTypes">
+			Applies hermite interpolation. Produces smooth transition.
+		</constant>
+		<constant name="INTERP_QUINTIC" value="3" enum="InterpolationTypes">
+			Applies quintic interpolation. Produces the smoothest transition.
+		</constant>
+		<constant name="DISTANCE_EUCLID" value="0" enum="DistanceTypes">
+		</constant>
+		<constant name="DISTANCE_MANHATTAN" value="1" enum="DistanceTypes">
+		</constant>
+		<constant name="DISTANCE_LEASTAXIS" value="2" enum="DistanceTypes">
+		</constant>
+		<constant name="DISTANCE_GREATESTAXIS" value="3" enum="DistanceTypes">
+		</constant>
+		<constant name="BASIS_VALUE" value="0" enum="BasisTypes">
+			Use value noise as basis for noise generation.
+		</constant>
+		<constant name="BASIS_GRADIENT" value="1" enum="BasisTypes">
+			Use gradient noise as basis for noise generation.
+		</constant>
+		<constant name="BASIS_SIMPLEX" value="2" enum="BasisTypes">
+			Use simplex noise as basis for noise generation.
+		</constant>
+		<constant name="SEAMLESS_NONE" value="0" enum="MappingModes">
+			Do not generate seamless image.
+		</constant>
+		<constant name="SEAMLESS_X" value="1" enum="MappingModes">
+			Allows to generate a seamless image restricted to X coordinate, horizontally.
+		</constant>
+		<constant name="SEAMLESS_Y" value="2" enum="MappingModes">
+			Allows to generate a seamless image restricted to Y coordinate, vertically.
+		</constant>
+		<constant name="SEAMLESS_Z" value="3" enum="MappingModes">
+			Allows to generate a seamless image restricted to Z coordinate.
+		</constant>
+		<constant name="SEAMLESS_XY" value="4" enum="MappingModes">
+			Allows to generate a seamless image restricted to XY plane, used to create seamless textures.
+		</constant>
+		<constant name="SEAMLESS_XZ" value="5" enum="MappingModes">
+			Allows to generate a seamless image restricted to XZ plane.
+		</constant>
+		<constant name="SEAMLESS_YZ" value="6" enum="MappingModes">
+			Allows to generate a seamless image restricted to YZ plane.
+		</constant>
+		<constant name="SEAMLESS_XYZ" value="7" enum="MappingModes">
+			Allows to generate a seamless 3D image (not fully supported yet).
+		</constant>
+	</constants>
+</class>
